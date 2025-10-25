@@ -4,17 +4,13 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+    // Flutter Gradle plugin’i includeBuild ile bağla
+    def flutterSdkPath = System.getenv("FLUTTER_HOME") ?: System.getenv("FLUTTER_SDK") ?: null
+    if (flutterSdkPath != null) {
+        includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+    }
 }
-
 plugins {
-    id "dev.flutter.flutter-plugin-loader" version "1.0.0"
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
 }
-
-def flutterSdkPath = System.getenv("FLUTTER_HOME")
-if (flutterSdkPath == null) {
-    // GitHub Actions ve yerelde varsayılan yoldan okur
-    flutterSdkPath = file("../../..").absolutePath
-}
-includeBuild("${flutterSdkPath}/packages/flutter_tools/gradle")
-
 include(":app")
