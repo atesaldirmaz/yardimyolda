@@ -1,15 +1,23 @@
-// ⚠️ PLACEHOLDER CONFIGURATION - UPDATE FOR PRODUCTION ⚠️
+// Top-level Gradle build file
 
 buildscript {
+    // Kotlin 1.9.24 ⇠ Flutter stable ile uyumlu
     ext.kotlin_version = '1.9.24'
+
     repositories {
         google()
         mavenCentral()
     }
+
     dependencies {
+        // Android Gradle Plugin (AGP)
+        // Gradle wrapper'ınız 8.7 ise 8.5.2 güvenli seçimdir.
         classpath 'com.android.tools.build:gradle:8.5.2'
+
+        // Kotlin Gradle plugin
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // Google services plugin for Firebase
+
+        // Firebase / Google Services
         classpath 'com.google.gms:google-services:4.4.0'
     }
 }
@@ -21,26 +29,14 @@ allprojects {
     }
 }
 
-subprojects {
-    afterEvaluate { project ->
-        if (project.hasProperty("android")) {
-            android {
-                if (namespace == null) {
-                    namespace project.group
-                }
-            }
-        }
-    }
-}
-
+// (İsteğe bağlı) Tek bir build klasörü hiyerarşisi
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(':app')
 }
 
+// Temizlik
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
